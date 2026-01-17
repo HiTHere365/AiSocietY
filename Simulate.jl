@@ -4,7 +4,7 @@ Run this to start the simulation and generate analytics.
 """
 
 include("agents.jl")
-include("model.jl")
+include("Model.jl")
 
 using Agents
 using DataFrames
@@ -151,7 +151,7 @@ function generate_analytics(agent_data::DataFrame, model, output_dir::String)
         write(f, JSON3.write(summary, allow_inf = true))
     end
     
-    println("✓ Analytics saved to $output_dir")
+    println("Analytics saved to $output_dir")
     println("\nKey Findings:")
     println("  Final Population: $(summary["final_population"])")
     println("  Total Library Visits: $(summary["library_total_visits"])")
@@ -171,7 +171,7 @@ function quick_test()
     println("Running quick test (1000 steps)...")
     model = initialize_civilization(n_agents = 50)
     step!(model, 1000)
-    println("\n✓ Test complete!")
+    println("\nTest complete!")
     return model
 end
 

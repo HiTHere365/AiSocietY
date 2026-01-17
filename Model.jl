@@ -53,7 +53,7 @@ function initialize_civilization(;
 )
     
     # Create space
-    space = GridSpaceSingle(grid_size; periodic = false)
+    space = GridSpace(grid_size; periodic = false)
     
     # Create RNG
     rng = MersenneTwister(seed)
@@ -109,7 +109,7 @@ function initialize_civilization(;
     for id in 1:n_agents
         pos = (rand(rng, 1:grid_size[1]), rand(rng, 1:grid_size[2]))
         agent = create_citizen(id, pos)
-        add_agent_pos!(agent, model)
+        add_agent_own_pos!(agent, model)
     end
     
     return model
@@ -137,7 +137,9 @@ function citizen_step!(agent::Citizen, model)
     
     if action == :seek_energy
         # Move to random position and gain energy
-        walk!(agent, rand, model)
+        rng = abmrng(model)
+        direction = (rand(rng, -1:1), rand(rng, -1:1))
+        walk!(agent, direction, model)
         agent.energy += 20.0
         
     elseif action == :seek_knowledge
@@ -210,14 +212,10 @@ end
 function move_toward!(agent::Citizen, target::NTuple{2,Int}, model)
     dx = sign(target[1] - agent.pos[1])
     dy = sign(target[2] - agent.pos[2])
-    
-    new_pos = (agent.pos[1] + dx, agent.pos[2] + dy)
-    
-    # Check bounds
-    if 1 <= new_pos[1] <= size(model.space)[1] && 
-       1 <= new_pos[2] <= size(model.space)[2]
-        move_agent!(agent, new_pos, model)
-    end
+
+    # Use walk! with the direction tuple
+    direction = (dx, dy)
+    walk!(agent, direction, model)
 end
 
 # Track infrastructure usage over time

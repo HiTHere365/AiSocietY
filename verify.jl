@@ -12,9 +12,9 @@ println("="^60)
 # Check Julia version
 println("\n1. Checking Julia version...")
 if VERSION >= v"1.9"
-    println("   ✓ Julia $(VERSION) (>= 1.9 required)")
+    println("   [OK] Julia $(VERSION) (>= 1.9 required)")
 else
-    println("   ✗ Julia $(VERSION) - Need 1.9 or higher")
+    println("   [FAIL] Julia $(VERSION) - Need 1.9 or higher")
     exit(1)
 end
 
@@ -38,9 +38,9 @@ installed_packages = keys(Pkg.project().dependencies)
 missing_packages = String[]
 for pkg in required_packages
     if pkg in String.(installed_packages)
-        println("   ✓ $pkg")
+        println("   [OK] $pkg")
     else
-        println("   ✗ $pkg - MISSING")
+        println("   [MISSING] $pkg")
         push!(missing_packages, pkg)
     end
 end
@@ -55,7 +55,7 @@ println("\n3. Checking GPU support (optional)...")
 try
     using CUDA
     if CUDA.functional()
-        println("   ✓ CUDA available - GPU acceleration enabled")
+        println("   [OK] CUDA available - GPU acceleration enabled")
         println("   Device: $(CUDA.name(CUDA.device()))")
         println("   Memory: $(CUDA.total_memory(CUDA.device()) ÷ 1024^3) GB")
     else
@@ -72,25 +72,25 @@ println("\n4. Testing simulation components...")
 
 try
     include("agents.jl")
-    println("   ✓ agents.jl loaded")
+    println("   [OK] agents.jl loaded")
 catch e
-    println("   ✗ Error loading agents.jl: $e")
+    println("   [FAIL] Error loading agents.jl: $e")
     exit(1)
 end
 
 try
-    include("model.jl")
-    println("   ✓ model.jl loaded")
+    include("Model.jl")
+    println("   [OK] model.jl loaded")
 catch e
-    println("   ✗ Error loading model.jl: $e")
+    println("   [FAIL] Error loading model.jl: $e")
     exit(1)
 end
 
 try
-    include("simulate.jl")
-    println("   ✓ simulate.jl loaded")
+    include("Simulate.jl")
+    println("   [OK] simulate.jl loaded")
 catch e
-    println("   ✗ Error loading simulate.jl: $e")
+    println("   [FAIL] Error loading simulate.jl: $e")
     exit(1)
 end
 
@@ -99,9 +99,9 @@ println("\n5. Running minimal simulation test...")
 try
     model = initialize_civilization(n_agents = 10, grid_size = (10, 10))
     step!(model, 10)
-    println("   ✓ Basic simulation works!")
+    println("   [OK] Basic simulation works")
 catch e
-    println("   ✗ Simulation test failed: $e")
+    println("   [FAIL] Simulation test failed: $e")
     exit(1)
 end
 
