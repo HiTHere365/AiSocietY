@@ -104,4 +104,4 @@ Infrastructure Usage:
 
 GNU Affero General Public License v3.0 (AGPL v3)
 
-For commercial licensing: fierier.heated9b@icloud.com
+For commercial licensing: volts-beret0t@icloud.com
